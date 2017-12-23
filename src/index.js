@@ -5,73 +5,72 @@ console.log('Running app');
 
 const appObjekt = {
     title: 'Indecision App',
-    subtitle: 'App for de som ikke klarer velge'
+    subtitle: 'App for de som ikke klarer velge',
+    options: []
 };
 
-const template = (
-    <div>
-        <h1>{appObjekt.title}</h1>
-        {appObjekt.subtitle && <p>{appObjekt.subtitle}</p>}
-        <p>{(appObjekt.options && appObjekt.options.length > 0) ? "Here are your options" : "No options for you !"}</p>
-        <ol>
-            <li>first tiem</li>
-            <li>second item</li>
-        </ol>
-    </div>
-);
-
-let count = 0;
-const addOne = () => {
-    count++;
-    renderCounterApp();
+//Vil bare gi en referanse til onFormSubmit, ikke kalle metode med (), da vil undefined bli returnert
+const onFormSubmit = (e) => {
+    e.preventDefault(); //Stopper full page refresh
+    const option = e.target.elements.option.value;
+    if (option) {
+        appObjekt.options.push(option);
+        e.target.elements.option.value = '';
+        renderApp();
+    }
+    
 };
 
-const minusOne = () => {
-    count--;
-    renderCounterApp();
+const onRemoveOptions = () => {
+    appObjekt.options = [];
+    renderApp();
 };
 
-const reset = () => {
-    count = 0;
-    renderCounterApp();
+const onMakeDecision = () => {
+    const randomNum = Math.floor(Math.random() * appObjekt.options.length);
+    const option = appObjekt.options[randomNum];
+    alert(option);
 };
 
+// const showOptionsButtons = () => {
+//     if (appObjekt.options.length > 0) {
+//         return <div>
+//             <button onClick={onRemoveOptions}>Remove</button>
+//             <button onClick={onMakeDecision}>What should I do</button>
+//         </div>
+//     }
+// }
 
-
-
-
-const renderCounterApp = () => {
-    const templateTwo = (
-        <div> 
-            <h1>Count : {count} </h1>
-            <button onClick={addOne}>+1 </button>
-            <button onClick={minusOne}>-1</button>
-            <button onClick={reset}>reset</button>
+const renderApp = () => {
+    const template = (
+        <div>
+            <h1>{appObjekt.title}</h1>
+            {appObjekt.subtitle && <p>{appObjekt.subtitle}</p>}
+            <p>{(appObjekt.options && appObjekt.options.length > 0) ? "Here are your options" : "No options for you !"}</p>
+            <button disabled={appObjekt.options.length === 0} onClick={onRemoveOptions}>Remove</button>
+            <button disabled={appObjekt.options.length === 0} onClick={onMakeDecision}>What should I do</button>
+            <ol>
+                {
+                    appObjekt.options.map((option) => {
+                        return <li key={option}>Option : {option}</li>
+                    })
+                }
+            </ol>
+            <form onSubmit={onFormSubmit}>
+                <input type="text" name="option" />
+                <button>Add option</button>
+            </form>
         </div>
     );
 
-ReactDOM.render(templateTwo,document.getElementById('root'));
+    ReactDOM.render(template, document.getElementById('root'));
 };
 
-renderCounterApp();
-// const user = {
-//     name:'Eivind',
-//     location: 'Sagene',
-//     age: 19
-// };
+renderApp();
 
-// //Returnerer undefined default
-// function getLocation(location) {
-//     if (location) {
-//         return  <p>Sted : {location}</p>;
-//     }
-// };
 
-// const templateTwo = (
-//     <div>
-//         <h1>{user.name ? user.name : 'Uknown'}</h1>
-//         {(user.age && user.age >= 18) && <p>Alder : {user.age}</p>}
-//         {getLocation(user.location)}
-//     </div>
-// );
+
+
+
+
 
