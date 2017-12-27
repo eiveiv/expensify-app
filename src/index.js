@@ -1,72 +1,98 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-console.log('Running app');
-
-const appObjekt = {
-    title: 'Indecision App',
-    subtitle: 'App for de som ikke klarer velge',
-    options: []
-};
-
-//Vil bare gi en referanse til onFormSubmit, ikke kalle metode med (), da vil undefined bli returnert
-const onFormSubmit = (e) => {
-    e.preventDefault(); //Stopper full page refresh
-    const option = e.target.elements.option.value;
-    if (option) {
-        appObjekt.options.push(option);
-        e.target.elements.option.value = '';
-        renderApp();
+class IndecisionApp extends React.Component {
+    render() {
+        const title = 'Indecision';
+        const subtitle = 'Put your life in the hands of a computer';
+        const options = ['Fishing', 'Working', 'Drinking'];
+        return (
+            <div>
+                <Header title = {title} subtitle={subtitle} />
+                <Action />
+                <Options options = {options} />
+                <AddOption />
+            </div>
+        );
     }
-    
-};
+}
 
-const onRemoveOptions = () => {
-    appObjekt.options = [];
-    renderApp();
-};
+class Header extends React.Component {
+    render() {
+        return (
+            <div>
+                <h1>{this.props.title}</h1>
+                <h2>{this.props.subtitle}</h2>
+            </div>
+        );
+    }
+}
 
-const onMakeDecision = () => {
-    const randomNum = Math.floor(Math.random() * appObjekt.options.length);
-    const option = appObjekt.options[randomNum];
-    alert(option);
-};
+class Action extends React.Component {
+    handlePick() {
+        alert('HandlePick');
+    }
+    render() {
+        return (
+            <div>
+                <button onClick={this.handlePick}>What should I do</button>
+            </div>
+        );
+    }
+}
 
-// const showOptionsButtons = () => {
-//     if (appObjekt.options.length > 0) {
-//         return <div>
-//             <button onClick={onRemoveOptions}>Remove</button>
-//             <button onClick={onMakeDecision}>What should I do</button>
-//         </div>
-//     }
-// }
+class Options extends React.Component {
+    constructor(props) {
+        super(props);
+        this.handleRemoveAll = this.handleRemoveAll.bind(this);
+    }
+    handleRemoveAll() {
+        alert(this.props.options);
+    }
+    render() {
+        return (
+            <div>
+                <button onClick={this.handleRemoveAll}>Remove all</button>
+                {this.props.options.map((option) => 
+                    <Option key ={option} option = {option} />
+                )}
+            </div>
+        );
+    }
+}
 
-const renderApp = () => {
-    const template = (
-        <div>
-            <h1>{appObjekt.title}</h1>
-            {appObjekt.subtitle && <p>{appObjekt.subtitle}</p>}
-            <p>{(appObjekt.options && appObjekt.options.length > 0) ? "Here are your options" : "No options for you !"}</p>
-            <button disabled={appObjekt.options.length === 0} onClick={onRemoveOptions}>Remove</button>
-            <button disabled={appObjekt.options.length === 0} onClick={onMakeDecision}>What should I do</button>
-            <ol>
-                {
-                    appObjekt.options.map((option) => {
-                        return <li key={option}>Option : {option}</li>
-                    })
-                }
-            </ol>
-            <form onSubmit={onFormSubmit}>
-                <input type="text" name="option" />
+class Option extends React.Component {
+    render() {
+        return (
+            <p>{this.props.option}</p>
+        );
+    }
+}
+
+class AddOption extends React.Component {
+    handleAddOption(e) {
+        e.preventDefault();
+        const option = e.target.elements.optionInput.value.trim();
+        if (option) {
+            alert(option);
+        }
+    }
+    render() {
+        return (
+            <div>
+                <form onSubmit={this.handleAddOption}>
+                <input type="text" name="optionInput" />
+                <br/>
                 <button>Add option</button>
-            </form>
-        </div>
-    );
+                </form>
+            </div>
+        );
+    }
+}
 
-    ReactDOM.render(template, document.getElementById('root'));
-};
 
-renderApp();
+
+ReactDOM.render(<IndecisionApp />, document.getElementById('root'));
 
 
 
