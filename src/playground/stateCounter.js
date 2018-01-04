@@ -42,4 +42,8 @@ class Counter extends React.Component {
   }
 }
 
+Counter.defaultProps = {
+  counter : 0
+}
+
 ReactDOM.render(<Counter />, document.getElementById('root'));
