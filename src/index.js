@@ -17,13 +17,27 @@ class IndecisionApp extends React.Component {
     }
 
     componentDidMount() {
-        console.log('componentDidMount');
+        console.log(__dirname);
+        try {
+            const json = localStorage.getItem('options');
+            const optionsArray = JSON.parse(json);
+            if (optionsArray) {
+                this.setState(() => ({
+                    options : optionsArray
+                }));
+            }
+        } catch(e) {
+            console.log('ERROR');
+        }
+        
+        
     }
 
     componentDidUpdate(prevProps, prevState) {
-        console.log('prevState' + prevState.options)
-        console.log('newState' + this.state.options)
-        console.log('ComponentDidUpdate');
+        if (prevState.options.length !== this.state.options.length) {
+            const json = JSON.stringify(this.state.options);
+            localStorage.setItem('options', json);
+        }
     }
 
     componentWillUnmount() {
@@ -111,6 +125,7 @@ const Options = (props) => {
     return (
         <div>
             <button onClick={props.handleDeleteOptions}>Remove all</button>
+            {props.options.length === 0 && <p> Please add an option</p>}
             {props.options.map((option) => (
                 <Option
                     key={option}
@@ -151,6 +166,10 @@ class AddOption extends React.Component {
         const error = this.props.handleAddOption(option);
         // e.target.elements.optionInput.value = '';
         this.setState(() => ({error: error}));
+
+        if (!error) {
+            e.target.elements.optionInput.value = '';
+        }
     }
     render() {
         return (
@@ -175,7 +194,7 @@ class AddOption extends React.Component {
 //     </div>
 //     )};
 
-ReactDOM.render(<IndecisionApp options= {['Hanging']}/>, document.getElementById('root'));
+ReactDOM.render(<IndecisionApp />, document.getElementById('root'));
 
 
 
