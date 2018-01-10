@@ -1,0 +1,7 @@
+{
+    //Må si ifra at webpack må kjøre all js gjennom babel
+    "presets": [
+        "env",
+        "react"
+    ]
+}
