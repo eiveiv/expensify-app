@@ -1,0 +1,25 @@
+//widget header
+.widget {
+    background: $light-blue;
+    margin-bottom: $xl-size;
+}
+
+.widget__message {  //Brukes på p-taggen
+    color: $off-white;
+    margin: 0;
+    padding: $l-size;
+    border-bottom: 1px solid lighten($light-blue, 10%);
+    text-align: center;
+}
+
+.widget-header {
+    background: $blue;
+    color: $off-white;
+    display: flex;
+    justify-content: space-between;  //All ekstra space blir mellom elementene
+    padding: $m-size;
+}
+
+.widget-header__title {
+    margin: 0;
+}
