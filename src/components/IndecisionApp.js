@@ -4,11 +4,13 @@ import Options from './Options';
 import Header from './Header';
 import Action from './Action';
 import AddOption from './AddOption';
+import OptionModal from './OptionModal';
 
 class IndecisionApp extends React.Component {
 
     state = {
-        options: []
+        options: [],
+        selectedOption: undefined
     };
 
     handleDeleteOptions = () => {
@@ -26,11 +28,21 @@ class IndecisionApp extends React.Component {
         console.log('Deleting option' + optionToRemove);
     }
 
+    handleClosePopup = () => {
+        this.setState(() => ({
+            selectedOption: undefined
+        }));
+    }
+
     handlePickOption = () => {
         const randomNum = Math.floor(Math.random() * this.state.options.length);
         const option = this.state.options[randomNum];
-        alert(option);
+        this.setState(() => ({
+            selectedOption: option
+        }));
+        console.log(this.state.selectedOption);
     }
+
     handleAddOption = (option) => {
         if (!option) {
             return 'Enter valid value pl0xz';
@@ -75,14 +87,19 @@ class IndecisionApp extends React.Component {
         return (
             <div>
                 <Header subtitle={subtitle} />
-                <Action hasOptions={this.state.options.length > 0}
-                    handlePickOption={this.handlePickOption}
+                <div className="container" color="containerBodyColor">
+                    <Action hasOptions={this.state.options.length > 0}
+                        handlePickOption={this.handlePickOption}
+                    />
+                    <Options options={this.state.options}
+                        handleDeleteOption={this.handleDeleteOption}
+                        handleDeleteOptions={this.handleDeleteOptions}
+                    />
+                    <AddOption handleAddOption={this.handleAddOption} />
+                </div>
+                <OptionModal selectedOption={this.state.selectedOption}
+                    handleClosePopup={this.handleClosePopup}
                 />
-                <Options options={this.state.options}
-                    handleDeleteOption={this.handleDeleteOption}
-                    handleDeleteOptions={this.handleDeleteOptions}
-                />
-                <AddOption handleAddOption={this.handleAddOption} />
             </div>
         );
     }
