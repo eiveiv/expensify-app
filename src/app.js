@@ -7,7 +7,7 @@ import './styles/styles.scss';
 
 //stateless functional component
 
-ReactDOM.render( <IndecisionApp />, document.getElementById('app'));
+ReactDOM.render( <p>Some stuff </p>, document.getElementById('app'));
 
 
 
