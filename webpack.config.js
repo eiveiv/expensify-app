@@ -24,6 +24,7 @@ module.exports = {
   devtool: 'cheap-module-eval-source-map',  //Gir debugging much love
   devServer: {  //Lager bundle.js file i minne så det skal gå mye raskere under utvikling
     contentBase: path.join(__dirname, 'public'),
-    port: 8085
+    port: 8085,
+    historyApiFallback: true
   }
 };
