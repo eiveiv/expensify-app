@@ -25,17 +25,31 @@ console.log('destructuring');
 //     console.log(`Its ${temperature} degrees in ${city}`);
 // }
 
-const book = {
-    title: 'Ego is the enemy',
-    author: 'Ryan Holiday',
-    publisher: {
-        name:   'Pinguin'
-    }
-};
+// const book = {
+//     title: 'Ego is the enemy',
+//     author: 'Ryan Holiday',
+//     publisher: {
+//         name:   'Pinguin'
+//     }
+// };
 
-const {
-    name: publisherName = 'selfpublish'
-} = book.publisher;
+// const {
+//     name: publisherName = 'selfpublish'
+// } = book.publisher;
 
-console.log(publisherName); //Default selfpublush
+// console.log(publisherName); //Default selfpublush
 
+
+// Array destructuring
+
+const address = ['mogata 8a', '', , 1288];
+
+const [gate, by, fylke = 'NYC', zip] = address;
+
+console.log(`you are in ${gate}  ${fylke}`);
+
+
+const item = ['tea', '$2', '$3', '$5'];
+
+const [drikke,,mediumpris] = item;
+console.log(`En medium ${drikke} koster ${mediumpris}`);
