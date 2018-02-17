@@ -10,7 +10,7 @@ const addExpense = (
         note = '',
         amount = 0,
         createdAt = 0
-} = {}
+  } = {}
 ) => ({
     type: 'ADD_EXPENSE',
     expense: {
@@ -28,7 +28,18 @@ const removeExpense = ({id}) => ({
     id
 });
 //EDIT_EXPENSE
+
+const editExpense = (id, updates) => ({
+    type: 'EDIT_EXPENSE',
+    id,
+    updates
+});
 //SET_TEXT_FILTER
+
+const setTextFilter = (text) => ({
+    type: 'SET_TEXT_FILTER',
+    text
+});
 //SORT_BY_DATE
 //SORT_BY_AMOUNT
 //SORT_BY_START_DATE
@@ -38,21 +49,26 @@ const removeExpense = ({id}) => ({
 const expensesReducerDefaultState = [];
 
 const expensesReducer = (state = expensesReducerDefaultState, action) => {
-    console.log('Kom inn i expensesReducer');
 
     switch (action.type) {
         case 'ADD_EXPENSE':
-            console.log(JSON.stringify(action.type));
             // return state.concat(action.expense);  //Må bruke concact istedenfor push fordi concat lager en ny, mens push endrer på eksisterende
             return [
                 ...state,
                 action.expense
             ];
         case 'REMOVE_EXPENSE':
-            console.log(JSON.stringify(action.id));
-            console.log(JSON.stringify(state));
             return state.filter(({id}) => id !== action.id) //Filter lager en ny array, endrer ikke eksisterende
-            
+        case 'EDIT_EXPENSE':
+            return state.map( (expense) => {
+                if (expense.id === action.id) {
+                    return {
+                        ...expense,
+                        ...action.updates
+                    };
+                } 
+            });    
+        
         default:
             return state;
     }
@@ -68,6 +84,12 @@ const filtersReducerDefaultStore = {
 
 const filtersReducer = (state = filtersReducerDefaultStore, action) => {
     switch (action.type) {
+        case 'SET_TEXT_FILTER':
+            console.log(JSON.stringify(action.text));
+            console.log(JSON.stringify(state.text));
+            return {...state,
+                    text:action.text };
+
         default:
             return state;
     }
@@ -90,6 +112,12 @@ const expense2 = store.dispatch(addExpense({description: 'sjokomelk', amount : 2
 
 store.dispatch(removeExpense({id : expense1.expense.id}));
 
+store.dispatch(editExpense(expense2.expense.id, {
+    amount: 500
+}));
+
+store.dispatch(setTextFilter('leie'));
+// store.dispatch(setTextFilter());
 
 const demostate = {
     expenses: [{
@@ -106,3 +134,15 @@ const demostate = {
         endDate: undefined
     }
 };
+
+const user = {
+    name: 'Eiv',
+    age: 32
+};
+
+console.log({
+    ...user,
+    age: 'Programming'
+});
+
+console.log(user);
